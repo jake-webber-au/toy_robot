@@ -121,3 +121,12 @@ describe 'Robot ROTATE command' do
     end
 end 
 
+describe 'Robot REPORT command' do
+    it 'reports position and direction to STDOUT' do
+      r = Robot.new
+      r.place(0,5,'south')
+      message = "Robot is at x:0, y:5, facing south.\n"
+      expect { r.report }.to output(message).to_stdout
+    end
+end 
+

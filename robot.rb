@@ -39,33 +39,34 @@ class Robot
   # an OutOfBounds error.
   def move
     case @facing
-     when 'north'
-      if @y >= 5 then raise RobotOutOfBounds.new end
-      @y += 1
-     when 'south'
-      if @y == 0 then raise RobotOutOfBounds.new end
-      @y -= 1 
-     when 'east'
-      if @x >= 5 then raise RobotOutOfBounds.new end
-      @x += 1
-     when 'west'
-      if @x == 0 then raise RobotOutOfBounds.new end
-      @x -= 1
-   end
+       when 'north'
+        if @y >= 5 then raise RobotOutOfBounds.new end
+        @y += 1
+       when 'south'
+        if @y == 0 then raise RobotOutOfBounds.new end
+        @y -= 1 
+       when 'east'
+        if @x >= 5 then raise RobotOutOfBounds.new end
+        @x += 1
+       when 'west'
+        if @x == 0 then raise RobotOutOfBounds.new end
+        @x -= 1
+    end
   end
 
   # rotates the robot a certain direction - left or right.
   def rotate(direction)
-     guide = {north: {left: 'west', right: 'east'},
-      south: {left: 'east', right: 'west'},
-      east: {left: 'north', right: 'south'},
-      west: {left: 'south', right: 'north'}}
+    guide = {north: {left: 'west', right: 'east'},
+    south: {left: 'east', right: 'west'},
+    east: {left: 'north', right: 'south'},
+    west: {left: 'south', right: 'north'}}
 
-      @facing = guide[@facing.to_sym][direction.to_sym]
+    @facing = guide[@facing.to_sym][direction.to_sym]
   end
 
   # reports the location of the robot to STDOUT
   def report
+    puts "Robot is at x:#{@x}, y:#{@y}, facing #{@facing}."
   end
 
 end
