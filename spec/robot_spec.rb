@@ -130,20 +130,55 @@ describe 'Robot REPORT command' do
     end
 end
 
-describe 'Robot issue command' do
+describe 'Robot issue command (integration testing)' do
     it 'reports not placed yet error to STDOUT' do
       r = Robot.new
       move_cmd = {"type" => "move"}
       message = "Command 'move' ignored - Reason: Not Placed Yet.\n"
       expect {r.issue_command(move_cmd)}.to output(message).to_stdout
     end
+    it 'reports out of bounds errors to STDOUT' do
+      r = Robot.new
+      r.issue_command({"type" => "place", "x"=>1, "y"=>5, "facing"=>"north"})
+      message = "Command 'move' ignored - Reason: Command would result in falling.\n"
+      expect {r.issue_command({"type" => "move"})}.to output(message).to_stdout
+    end
     it 'forwards command if placed correctly' do
       r = Robot.new
-      place_cmd = {"type" => "place", "x"=>1, "y"=>2, "facing"=>"north"}
-      move_cmd = {"type" => "move"}
-      r.issue_command(place_cmd)
-      r.issue_command(move_cmd)
+      r.issue_command({"type" => "place", "x"=>1, "y"=>2, "facing"=>"north"})
+      r.issue_command({"type" => "move"})
       expect(r.instance_variable_get(:@x)).to eq(1)
       expect(r.instance_variable_get(:@y)).to eq(3)
+    end
+    it 'ignores invalid initial placement command' do
+      r = Robot.new
+      r.issue_command({"type" => "place", "x"=>6, "y"=>2, "facing"=>"north"})
+      r.issue_command({"type" => "move"})
+      r.issue_command({"type" => "place", "x"=>1, "y"=>1, "facing"=>"east"})
+      r.issue_command({"type" => "move"})
+      r.issue_command({"type" => "move"})
+      r.issue_command({"type" => "right"})
+      expect(r.instance_variable_get(:@x)).to eq(3)
+      expect(r.instance_variable_get(:@y)).to eq(1)
+      expect(r.instance_variable_get(:@facing)).to eq("south")
+    end
+    it 'ignores invalid move commands' do
+      r = Robot.new
+      r.issue_command({"type" => "place", "x"=>5, "y"=>5, "facing"=>"north"})
+      r.issue_command({"type" => "move"})
+      r.issue_command({"type" => "place", "x"=>1, "y"=>4, "facing"=>"west"})
+      r.issue_command({"type" => "move"})
+      r.issue_command({"type" => "right"})
+      expect(r.instance_variable_get(:@x)).to eq(0)
+      expect(r.instance_variable_get(:@y)).to eq(4)
+      expect(r.instance_variable_get(:@facing)).to eq("north")
+    end
+    it 'forwards left/right command' do
+      r = Robot.new
+      r.issue_command({"type" => "place", "x"=>1, "y"=>2, "facing"=>"north"})
+      r.issue_command({"type" => "left"})
+      r.issue_command({"type" => "right"})
+      r.issue_command({"type" => "right"})
+      expect(r.instance_variable_get(:@facing)).to eq('east')
     end
 end

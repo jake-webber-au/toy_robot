@@ -22,6 +22,14 @@ class Robot
           place(cmd["x"], cmd["y"], cmd["facing"])
         when "move"
           move
+        when "left"
+          rotate("left")
+        when "right"
+          rotate("right")
+        when "report"
+          report
+        else
+          raise RobotCmdErr.new("Command not recognised.")
       end
 
     rescue RobotCmdErr, RobotOutOfBounds => e
