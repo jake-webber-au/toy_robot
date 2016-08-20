@@ -105,3 +105,19 @@ describe 'Robot MOVE command' do
   end
 end 
 
+describe 'Robot ROTATE command' do
+    it 'rotates left correctly' do
+      r = Robot.new
+      r.place(0,5,'north')
+      r.rotate('left')
+      expect(r.instance_variable_get(:@facing)).to eq('west')
+    end
+
+    it 'rotates right correctly' do
+      r = Robot.new
+      r.place(0,5,'south')
+      r.rotate('right')
+      expect(r.instance_variable_get(:@facing)).to eq('west')
+    end
+end 
+

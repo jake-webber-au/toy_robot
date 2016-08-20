@@ -56,6 +56,12 @@ class Robot
 
   # rotates the robot a certain direction - left or right.
   def rotate(direction)
+     guide = {north: {left: 'west', right: 'east'},
+      south: {left: 'east', right: 'west'},
+      east: {left: 'north', right: 'south'},
+      west: {left: 'south', right: 'north'}}
+
+      @facing = guide[@facing.to_sym][direction.to_sym]
   end
 
   # reports the location of the robot to STDOUT
