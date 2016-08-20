@@ -5,7 +5,7 @@
     "options" : {
       "x": 1,
       "y": 2,
-      "f": "west"
+      "f": "east"
     }
   },
   { 
@@ -15,7 +15,7 @@
     "type": "move"
   },
   { 
-    "type": "right"
+    "type": "left"
   },
   { 
     "type": "move"
