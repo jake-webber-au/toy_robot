@@ -167,12 +167,12 @@ describe 'Robot issue command (integration testing)' do
       r = Robot.new
       r.issue_command({"type" => "place", "x"=>5, "y"=>5, "facing"=>"north"})
       r.issue_command({"type" => "move"})
-      r.issue_command({"type" => "place", "x"=>1, "y"=>4, "facing"=>"west"})
-      r.issue_command({"type" => "move"})
       r.issue_command({"type" => "right"})
-      expect(r.instance_variable_get(:@x)).to eq(0)
+      r.issue_command({"type" => "right"})
+      r.issue_command({"type" => "move"})
+      expect(r.instance_variable_get(:@x)).to eq(5)
       expect(r.instance_variable_get(:@y)).to eq(4)
-      expect(r.instance_variable_get(:@facing)).to eq("north")
+      expect(r.instance_variable_get(:@facing)).to eq("south")
     end
     it 'forwards left/right command' do
       r = Robot.new
