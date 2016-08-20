@@ -17,3 +17,12 @@ Built in Ruby.
   * REPORT
     * REPORT will announce the X,Y and F of the robot to STDOUT.
 
+## Getting Started ##
+* Clone the repo locally
+* Run `ruby run.rb ./sample-data/c.json`
+  * You will find various sample JSON commands in the `./sample-data` directory, pass these into `run.rb` to simulate them.
+
+### Running the test suite ###
+* Run `bundle install` to get RSpec
+* Run the suite with `rspec spec` in the root directory.
+
