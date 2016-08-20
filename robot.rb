@@ -14,6 +14,11 @@ class Robot
   # Must be the first command for a robot prior to all other
   # movement commands.
   def place(x,y,facing)
+
+    if !x.between?(0,5) || !y.between?(0,5)
+      raise RobotOutOfBounds.new
+    end
+
   end
 
   # Advances robot 1 unit in the direction it is currently

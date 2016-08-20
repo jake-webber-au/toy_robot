@@ -17,3 +17,10 @@ describe 'Robot Class' do
     expect(Robot.new).to respond_to(:report)
   end
 end 
+
+describe 'Robot PLACE command' do
+  it 'errors if the robot is not placed within 5x5 grid.' do
+    r = Robot.new
+    expect{r.place(0,6,'north')}.to raise_error(RobotOutOfBounds)
+  end
+end 
