@@ -1,3 +1,5 @@
+require_relative './errors.rb'
+
 class Robot
   
   # public interface for command processing for the robot.
