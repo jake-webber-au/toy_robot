@@ -7,6 +7,29 @@ class Robot
   # erroneous commands 
   def issue_command(cmd)
 
+    begin
+
+      # we need to ensure that the robot has had its initial
+      # valid placement command, else we ignore the command.
+      if cmd["type"] != 'place' && !@initial_placement
+        raise RobotCmdErr.new("Not Placed Yet.")
+      end
+
+      # call relevent methods based on command input
+      # ignore unknown commands.
+      case cmd["type"]
+        when "place"
+          place(cmd["x"], cmd["y"], cmd["facing"])
+        when "move"
+          move
+      end
+
+    rescue RobotCmdErr, RobotOutOfBounds => e
+      puts "Command '#{cmd["type"]}' ignored - Reason: #{e.message}"
+    else
+      puts "Command '#{cmd["type"]}' succeeded."
+    end
+
   end
 
   # Picks up the robot and places it on a co-ordinate inside

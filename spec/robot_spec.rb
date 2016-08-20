@@ -126,7 +126,24 @@ describe 'Robot REPORT command' do
       r = Robot.new
       r.place(0,5,'south')
       message = "Robot is at x:0, y:5, facing south.\n"
-      expect { r.report }.to output(message).to_stdout
+      expect {r.report }.to output(message).to_stdout
     end
-end 
+end
 
+describe 'Robot issue command' do
+    it 'reports not placed yet error to STDOUT' do
+      r = Robot.new
+      move_cmd = {"type" => "move"}
+      message = "Command 'move' ignored - Reason: Not Placed Yet.\n"
+      expect {r.issue_command(move_cmd)}.to output(message).to_stdout
+    end
+    it 'forwards command if placed correctly' do
+      r = Robot.new
+      place_cmd = {"type" => "place", "x"=>1, "y"=>2, "facing"=>"north"}
+      move_cmd = {"type" => "move"}
+      r.issue_command(place_cmd)
+      r.issue_command(move_cmd)
+      expect(r.instance_variable_get(:@x)).to eq(1)
+      expect(r.instance_variable_get(:@y)).to eq(3)
+    end
+end
