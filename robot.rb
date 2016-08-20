@@ -19,6 +19,18 @@ class Robot
       raise RobotOutOfBounds.new
     end
 
+    if !(["north","south","east","west"].include? facing)
+      raise RobotCmdErr.new("Malformed Place Command.")
+    end
+
+    @x = x
+    @y = y
+    @facing = facing
+
+    if @initial_placement != true
+      @initial_placement = true
+    end
+
   end
 
   # Advances robot 1 unit in the direction it is currently
