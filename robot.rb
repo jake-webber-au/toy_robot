@@ -1,93 +1,52 @@
 require_relative './errors.rb'
+require_relative './table.rb'
 
 class Robot
 
-  def initialize(tableX = 5, tableY = 5)
-    @tableX = tableX
-    @tableY = tableY
-  end
+  attr_reader :facing, :x, :y
 
-  # public interface for command processing for the robot.
-  # ensures the order of the commands are correct and handles
-  # erroneous commands 
-  def issue_command(cmd)
-
-    begin
-
-      # we need to ensure that the robot has had its initial
-      # valid placement command, else we ignore the command.
-      if cmd["type"] != 'place' && !@initial_placement
-        raise RobotCmdErr.new("Not Placed Yet.")
-      end
-
-      # call relevent methods based on command input
-      # ignore unknown commands.
-      case cmd["type"]
-        when "place"
-          place(cmd["x"], cmd["y"], cmd["facing"])
-        when "move"
-          move
-        when "left"
-          rotate("left")
-        when "right"
-          rotate("right")
-        when "report"
-          report
-        else
-          raise RobotCmdErr.new("Command not recognised.")
-      end
-
-    rescue RobotCmdErr, RobotOutOfBounds => e
-      puts "Command '#{cmd["type"]}' ignored - Reason: #{e.message}"
-    else
-      puts "Command '#{cmd["type"]}' succeeded."
-    end
-
+  def initialize(table)
+    @Table = table
   end
   
   # Picks up the robot and places it on a co-ordinate inside
   # the grid, facing the specified direction.
-  # Must be the first command for a robot prior to all other
-  # movement commands.
-  def place(x,y,facing)
+  def place(x, y, f)
 
-    if !x.between?(0,@tableX) || !y.between?(0,@tableY)
-      raise RobotOutOfBounds.new
-    end
-
-    if !(["north","south","east","west"].include? facing)
+    @Table.check_boundary(x,y)
+ 
+    if !(["north","south","east","west"].include? f)
       raise RobotCmdErr.new("Malformed Place Command.")
     end
 
     @x = x
     @y = y
-    @facing = facing
-
-    if @initial_placement != true
-      @initial_placement = true
-    end
+    @facing = f
 
   end
 
   # Moves robot 1 unit in the direction it is currently
-  # facing. We need to ensure that the command doesn't
-  # cause the robot to fall off the table so we will throw
-  # an OutOfBounds error.
+  # facing. Checks the make sure the movement won't cause
+  # the robot to fall off the table.
   def move
     case @facing
        when 'north'
-        if @y >= @tableY then raise RobotOutOfBounds.new end
-        @y += 1
+         @y += 1 if @Table.check_boundary(@x, @y + 1)
        when 'south'
-        if @y == 0 then raise RobotOutOfBounds.new end
-        @y -= 1 
+         @y -= 1 if @Table.check_boundary(@x, @y - 1)
        when 'east'
-        if @x >= @tableX then raise RobotOutOfBounds.new end
-        @x += 1
+         @x += 1 if @Table.check_boundary(@x + 1, @y)
        when 'west'
-        if @x == 0 then raise RobotOutOfBounds.new end
-        @x -= 1
+         @x -= 1 if @Table.check_boundary(@x - 1, @y)
     end
+  end
+
+  def left
+    rotate('left')
+  end
+
+  def right
+    rotate('right')
   end
 
   # rotates the robot a certain direction - left or right.
