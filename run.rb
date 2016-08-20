@@ -1,4 +1,4 @@
-require_relative 'util.rb'
+require_relative 'Utilities.rb'
 require_relative 'Robot.rb'
 require_relative 'CommandRunner.rb'
 
