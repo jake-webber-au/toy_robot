@@ -30,6 +30,7 @@ class CommandRunner
   end
 
   # pulls the parameters required for the method on the robot.
+  # we will use this to cross reference what the user gives us.
   def get_method_params(command)
     params = Robot.instance_method(command.to_sym)
       .parameters.map(&:last)
@@ -40,18 +41,24 @@ class CommandRunner
   # parameters of the associated method are presented within the 
   # command. returns arguments in an array.
   def build_args(cmd)
+    params = get_method_params(cmd[:type])
+    args = []
+    
     if !cmd[:options].nil?
       options = cmd[:options].map(&:first)
-      args = []
-      params = get_method_params(cmd[:type])
       params.each do |params|
         if !options.include? params.to_sym
           raise RobotCmdErr.new("Missing #{params} parameter in '#{cmd[:type]}'")
         end
         args << cmd[:options][params.to_sym]
       end
-      return args
     end
+
+    if args.length != params.length
+      raise RobotCmdErr.new("Missing options node in command '#{cmd[:type]}'")
+    end
+
+    return args
   end
 
   # dispatches the command to the associated robot.

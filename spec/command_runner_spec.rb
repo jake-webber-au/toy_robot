@@ -30,6 +30,10 @@ describe 'Robot issue command' do
     @runner.issue_command({:type => "place", :options => { :x=>1, :y=>5, :f=>"north"}})
     expect(@r.instance_variable_get(:@facing)).to eq(nil)
   end
+  it 'handles error if no options are supplied when required' do
+    @runner.issue_command({:type => "place"})
+    expect(@r.instance_variable_get(:@facing)).to eq(nil)
+  end
   it 'forwards command if placed correctly' do
     @runner.issue_command({:type => "place", :options => { :x=>1, :y=>2, :f=>"north"}})
     @runner.issue_command({:type => "move"})
