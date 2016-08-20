@@ -40,5 +40,68 @@ describe 'Robot PLACE command' do
     expect(r.instance_variable_get(:@facing)).to eq('north')
     expect(r.instance_variable_get(:@initial_placement)).to eq(true)
   end
-
 end 
+
+describe 'Robot MOVE command' do
+
+  context 'fall prevention' do
+    it 'prevents falling off the tabletop to the north' do
+      r = Robot.new
+      r.place(0,5,'north')
+      expect{r.move}.to raise_error(RobotOutOfBounds)
+    end
+
+    it 'prevents falling off the tabletop to the south' do
+      r = Robot.new
+      r.place(5,0,'south')
+      expect{r.move}.to raise_error(RobotOutOfBounds)
+    end
+
+    it 'prevents falling off the tabletop to the east' do
+      r = Robot.new
+      r.place(5,2,'east')
+      expect{r.move}.to raise_error(RobotOutOfBounds)
+    end
+
+    it 'prevents falling off the tabletop to the west' do
+      r = Robot.new
+      r.place(0,5,'west')
+      expect{r.move}.to raise_error(RobotOutOfBounds)
+    end
+  end
+
+  context 'advance commands' do
+    it 'advances north by one unit' do
+      r = Robot.new
+      r.place(0,4,'north')
+      r.move
+      expect(r.instance_variable_get(:@y)).to eq(5)
+      expect(r.instance_variable_get(:@x)).to eq(0)
+    end
+
+    it 'advances south by one unit' do
+      r = Robot.new
+      r.place(0,4,'south')
+      r.move
+      expect(r.instance_variable_get(:@y)).to eq(3)
+      expect(r.instance_variable_get(:@x)).to eq(0)
+    end
+
+    it 'advances east by one unit' do
+      r = Robot.new
+      r.place(0,4,'east')
+      r.move
+      expect(r.instance_variable_get(:@y)).to eq(4)
+      expect(r.instance_variable_get(:@x)).to eq(1)
+    end
+
+    it 'advances west by one unit' do
+      r = Robot.new
+      r.place(2,0,'west')
+      r.move
+      expect(r.instance_variable_get(:@x)).to eq(1)
+      expect(r.instance_variable_get(:@y)).to eq(0)
+    end
+  end
+end 
+

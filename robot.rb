@@ -33,10 +33,25 @@ class Robot
 
   end
 
-  # Advances robot 1 unit in the direction it is currently
+  # Moves robot 1 unit in the direction it is currently
   # facing. We need to ensure that the command doesn't
-  # cause the robot to fall off the table.
-  def advance 
+  # cause the robot to fall off the table so we will throw
+  # an OutOfBounds error.
+  def move
+      case @facing
+       when 'north'
+        if @y >= 5 then raise RobotOutOfBounds.new end
+        @y += 1
+       when 'south'
+        if @y == 0 then raise RobotOutOfBounds.new end
+        @y -= 1 
+       when 'east'
+        if @x >= 5 then raise RobotOutOfBounds.new end
+        @x += 1
+       when 'west'
+        if @x == 0 then raise RobotOutOfBounds.new end
+        @x -= 1
+     end
   end
 
   # rotates the robot a certain direction - left or right.
