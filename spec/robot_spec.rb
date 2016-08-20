@@ -1,4 +1,5 @@
 require_relative '../robot.rb'
+require 'spec_helper'
 
 describe 'Robot Class' do
   it 'exists and instantiates.' do
