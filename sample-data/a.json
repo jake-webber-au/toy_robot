@@ -1,0 +1,14 @@
+{
+  "commands": [
+  { 
+    "type": "place",
+    "x": 0,
+    "y": 0,
+    "facing": "north"
+  },
+  { 
+    "type": "move"
+  }, {
+    "type": "report"
+  }]
+}
