@@ -2,9 +2,11 @@
   "commands": [
   { 
     "type": "place",
-    "x": 6,
-    "y": 2,
-    "facing": "east"
+    "options":{
+      "x": 6,
+      "y": 2,
+      "f": "east"
+    }
   },
   { 
     "type": "move"
@@ -16,7 +18,7 @@
     "type": "place",
     "x": 1,
     "y": 2,
-    "facing": "north"
+    "f": "north"
   },
   { 
     "type": "left"
