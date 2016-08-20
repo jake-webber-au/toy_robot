@@ -1,7 +1,12 @@
 require_relative './errors.rb'
 
 class Robot
-  
+
+  def initialize(tableX = 5, tableY = 5)
+    @tableX = tableX
+    @tableY = tableY
+  end
+
   # public interface for command processing for the robot.
   # ensures the order of the commands are correct and handles
   # erroneous commands 
@@ -39,14 +44,14 @@ class Robot
     end
 
   end
-
+  
   # Picks up the robot and places it on a co-ordinate inside
   # the grid, facing the specified direction.
   # Must be the first command for a robot prior to all other
   # movement commands.
   def place(x,y,facing)
 
-    if !x.between?(0,5) || !y.between?(0,5)
+    if !x.between?(0,@tableX) || !y.between?(0,@tableY)
       raise RobotOutOfBounds.new
     end
 
@@ -71,13 +76,13 @@ class Robot
   def move
     case @facing
        when 'north'
-        if @y >= 5 then raise RobotOutOfBounds.new end
+        if @y >= @tableY then raise RobotOutOfBounds.new end
         @y += 1
        when 'south'
         if @y == 0 then raise RobotOutOfBounds.new end
         @y -= 1 
        when 'east'
-        if @x >= 5 then raise RobotOutOfBounds.new end
+        if @x >= @tableX then raise RobotOutOfBounds.new end
         @x += 1
        when 'west'
         if @x == 0 then raise RobotOutOfBounds.new end
